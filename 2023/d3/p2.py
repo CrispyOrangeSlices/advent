@@ -36,7 +36,7 @@ def determine_number(num, cdx, ldx, valid_nums, content):
     for ndx, n in enumerate(num):
         adx = cdx - (len(num) - ndx)
         status, symbol_pos = enumerate_position(ldx, adx, content)
-        if status:
+        if status and content[symbol_pos[0]][symbol_pos[1]] == "*":
             is_part = True
             if symbol_pos in symbols:
                 symbols[symbol_pos].append(int(num))

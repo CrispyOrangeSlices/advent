@@ -1,5 +1,6 @@
 import sys
 
+
 def main():
     filename = sys.argv[1]
     print(filename)
@@ -12,10 +13,11 @@ def main():
             if line == "":
                 elf_totals.append(0)
             else:
-               elf_totals[-1] += int(line) 
-        midx = max(enumerate(elf_totals), key= lambda x: x[1])[0]
+                elf_totals[-1] += int(line)
+        midx = max(enumerate(elf_totals), key=lambda x: x[1])[0]
         mval = elf_totals[midx]
         print("Elf ", midx + 1, " has score: ", mval)
+
 
 if __name__ == "__main__":
     main()
