@@ -21,7 +21,6 @@ def main():
                 while sidx < len(seeds):
                     seedr.append((seeds[sidx], seeds[sidx+1]))
                     sidx+=2
-                print(seedr)
                                 
             elif "map" in line:
                 mdx += 1
@@ -34,53 +33,43 @@ def main():
                 b = line[0]
                 a = line[1]
                 sz = line[2]
-                map[mdx].append((a, b, sz))
+                map[mdx].append(((a,a+sz), (b, b+sz)))
             else:
                 pass
 
+        print(seedr)
+        seedf = list()
+        for start, count in seedr:
+            seedf.append((start, start+count))
+        
+        print(seedf)
+        for key in map:
+            print(map[key])
+     
+
+def helper(seed_range, mappings):
+    # This returns the lowest possible seed output given a seed and list of mappings
+    checks = list()
+    checks.append(seed_range[0]) # The first seed
+    for mapp in mappings:
+        # For every mapping, The
+        # Lower bound
+        pass
+
+    # Lowest Seed Not in a mapping 
+    # Lowest seed in a mapping
+    # Lowest valid output mapping seed
 
 
-        ## Instead, start at the last map and work our way up
-        rmap = list(map.keys())
-        rmap = list(reversed(rmap))
-        print(rmap)
-        print(map[rmap[0]])
-
-        translations = dict()
-        translations[0] = list()
-
-        print("-" * 20)
-        print(seeds)
-        seedy = dict()
-        for sdx, seed in enumerate(seeds):
-            seedy[sdx] = [seed]
-        print(map[0])
-        for sey in seedy:
-            for key in map:
-                cseed = seedy[sey][-1]
-                for t1 in map[key]:
-                    res = helper(t1, cseed)
-                    if res != -1:
-                        cseed = res
-                        break
-                seedy[sey].append(cseed)
-        locs = []
-        for key in seedy:
-            locs.append(seedy[key][-1])
-            print(seedy[key])
-        locs = sorted(locs)
-        print("Answer", locs[0])
+def tl(seed, mapping):
+    upper = mapping[0][1]
+    lower = mapping[0][0]
+    tl_lower = mapping[1][0]
+    if seed < mapping[0][1] and seed >= mapping[0][0]:
+        return seed - lower + tl_lower
+    return - 1
 
 
-def helper(t1, seed):
-    upper = t1[0] + t1[2]
-    lower = t1[0]
-
-    if seed >= lower and seed < upper:
-        print("Success")
-        return seed - lower + t1[1]
-    print("Failure")
-    return -1
 
 
 if __name__ == "__main__":
