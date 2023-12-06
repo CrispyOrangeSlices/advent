@@ -6,77 +6,53 @@ def main():
     print(filename)
     with open(filename) as f:
         content = f.readlines()
-        map = {}
-        mdx = -1
-        map[mdx] = list()
-        seeds = None
-        seedr = list()
+        times = None
+        dists = None
         for line in content:
-            if "seeds" in line:
-                line = line.strip().split(":")
-                seeds = line[1].split(" ")
-                seeds = [s for s in seeds if s]
-                seeds = [int(s) for s in seeds]
-                print(seeds)
-                sidx = 0
-                while sidx < len(seeds):
-                    seedr.append((seeds[sidx], seeds[sidx+1]))
-                    sidx+=2
-                                
-            elif "map" in line:
-                mdx += 1
-                map[mdx] = list()
-            #                print(mdx, line)
-            ## Increment the map each time
-            elif len(line) > 1:
-                line = line.strip().split(" ")
-                line = [int(i) for i in line]
-                b = line[0]
-                a = line[1]
-                sz = line[2]
-                map[mdx].append((a, b, sz))
-            else:
-                pass
+            if "Time" in line:
+                line = line.strip()
+                line = line.split(":")[1]
+                line = line.split(" ")
+                times = [int(t) for t in line if len(t) > 0]
+            elif "Distance" in line:
+                line = line.strip()
+                line = line.split(":")[1]
+                line = line.split(" ")
+                dists = [int(d) for d in line if len(d) > 0]
+
+        races = len(dists)
+
+        ways = []
+
+        for r in range(races):
+            ways.append(combs(times[r], dists[r]))
+
+        sum = 1
+        print(ways)
+        for way in ways:
+            sum *= way
+
+        print(sum)
 
 
+def combs(time, record):
+    # Left
+    start = 0
+    speed = 0
+    while start < time:
+        speed = start
+        if (time - start) * speed > record:
+            break
+        start += 1
+    start_r = time
+    while start_r > 0:
+        speed = start_r
 
-        ## Instead, start at the last map and work our way up
+        if (time - start_r) * speed > record:
+            break
+        start_r -= 1
 
-        translations = dict()
-        translations[0] = list()
-
-        print("-" * 20)
-        print(seeds)
-        seedy = dict()
-        for sdx, seed in enumerate(seeds):
-            seedy[sdx] = [seed]
-        print(map[0])
-        for sey in seedy:
-            for key in map:
-                cseed = seedy[sey][-1]
-                for t1 in map[key]:
-                    res = helper(t1, cseed)
-                    if res != -1:
-                        cseed = res
-                        break
-                seedy[sey].append(cseed)
-        locs = []
-        for key in seedy:
-            locs.append(seedy[key][-1])
-            print(seedy[key])
-        locs = sorted(locs)
-        print("Answer", locs[0])
-
-
-def helper(t1, seed):
-    upper = t1[0] + t1[2]
-    lower = t1[0]
-
-    if seed >= lower and seed < upper:
-        print("Success")
-        return seed - lower + t1[1]
-    print("Failure")
-    return -1
+    return start_r - start + 1
 
 
 if __name__ == "__main__":

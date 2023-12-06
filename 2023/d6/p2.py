@@ -6,70 +6,56 @@ def main():
     print(filename)
     with open(filename) as f:
         content = f.readlines()
-        map = {}
-        mdx = -1
-        seeds = None
-        seedr = list()
+        times = None
+        dists = None
         for line in content:
-            if "seeds" in line:
-                line = line.strip().split(":")
-                seeds = line[1].split(" ")
-                seeds = [s for s in seeds if s]
-                seeds = [int(s) for s in seeds]
-                print(seeds)
-                sidx = 0
-                while sidx < len(seeds):
-                    seedr.append((seeds[sidx], seeds[sidx+1]))
-                    sidx+=2
-                                
-            elif "map" in line:
-                mdx += 1
-                map[mdx] = list()
-            #                print(mdx, line)
-            ## Increment the map each time
-            elif len(line) > 1:
-                line = line.strip().split(" ")
-                line = [int(i) for i in line]
-                b = line[0]
-                a = line[1]
-                sz = line[2]
-                map[mdx].append(((a,a+sz), (b, b+sz)))
-            else:
-                pass
+            if "Time" in line:
+                line = line.strip()
+                line = line.split(":")[1]
+                line = line.split(" ")
+                times = [int(t) for t in line if len(t) > 0]
+            elif "Distance" in line:
+                line = line.strip()
+                line = line.split(":")[1]
+                line = line.split(" ")
+                dists = [int(d) for d in line if len(d) > 0]
 
-        print(seedr)
-        seedf = list()
-        for start, count in seedr:
-            seedf.append((start, start+count))
-        
-        print(seedf)
-        for key in map:
-            print(map[key])
-     
+        races = len(dists)
 
-def helper(seed_range, mappings):
-    # This returns the lowest possible seed output given a seed and list of mappings
-    checks = list()
-    checks.append(seed_range[0]) # The first seed
-    for mapp in mappings:
-        # For every mapping, The
-        # Lower bound
-        pass
+        ways = []
 
-    # Lowest Seed Not in a mapping 
-    # Lowest seed in a mapping
-    # Lowest valid output mapping seed
+        dist = ""
+        for d in dists:
+            dist += str(d)
+
+        timey = ""
+        for t in times:
+            timey += str(t)
+
+        timey = int(timey)
+        dist = int(dist)
+
+        print(combs(timey, dist))
 
 
-def tl(seed, mapping):
-    upper = mapping[0][1]
-    lower = mapping[0][0]
-    tl_lower = mapping[1][0]
-    if seed < mapping[0][1] and seed >= mapping[0][0]:
-        return seed - lower + tl_lower
-    return - 1
+def combs(time, record):
+    # Left
+    start = 0
+    speed = 0
+    while start < time:
+        speed = start
+        if (time - start) * speed > record:
+            break
+        start += 1
+    start_r = time
+    while start_r > 0:
+        speed = start_r
 
+        if (time - start_r) * speed > record:
+            break
+        start_r -= 1
 
+    return start_r - start + 1
 
 
 if __name__ == "__main__":
